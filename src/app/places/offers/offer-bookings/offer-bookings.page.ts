@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Place } from '../../places.model';
+import { PlacesService } from '../../places.service';
 
 @Component({
   selector: 'app-offer-bookings',
@@ -7,9 +10,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OfferBookingsPage implements OnInit {
 
-  constructor() { }
+  private place: Place;
+
+  constructor(
+    private placesService: PlacesService,
+    private actRoute: ActivatedRoute
+  ) { }
 
   ngOnInit() {
+    this.actRoute.paramMap.subscribe(paramMap => {
+      this.place = this.placesService.getPlace(paramMap.get('placeId'));
+    })
   }
 
 }

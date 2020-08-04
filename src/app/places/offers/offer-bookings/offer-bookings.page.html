@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Offer Booking</ion-title>
+    <ion-title>{{ place.name }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-button color="warning" [routerLink]="['/', 'places', 'tabs', 'offers', 'edit', place.id]">Edit Offer</ion-button>
 </ion-content>

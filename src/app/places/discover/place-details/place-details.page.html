@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>place-details</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/places/tabs/discover"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Place Details</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-button color="warning" (click)="goBack()">Back</ion-button>
 </ion-content>
