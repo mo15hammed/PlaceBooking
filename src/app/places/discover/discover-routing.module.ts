@@ -9,8 +9,9 @@ const routes: Routes = [
     component: DiscoverPage
   },
   {
-    path: 'place-details',
-    loadChildren: () => import('./place-details/place-details.module').then( m => m.PlaceDetailsPageModule)
+    path: ':placeId',
+    loadChildren: () => import('./place-details/place-details.module').then( m => m.PlaceDetailsPageModule),
+
   }
 ];
 

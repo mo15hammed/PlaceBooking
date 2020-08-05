@@ -1,7 +1,8 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { PlacesPage } from './places.page';
+import { DiscoverPage } from './discover/discover.page';
 
 const routes: Routes = [
   {
@@ -10,37 +11,13 @@ const routes: Routes = [
     children: [
       {
         path: 'discover',
-        children: [
-          {
-            path: '',
-            loadChildren: './discover/discover.module#DiscoverPageModule'
-          },
-          {
-            path: ':placeId',
-            loadChildren: './discover/place-details/place-details.module#PlaceDetailsPageModule'
-          }
-        ]
+        loadChildren: () => import('./discover/discover.module').then( m => m.DiscoverPageModule),
+        
       },
       {
         path: 'offers',
-        children: [
-          {
-            path: '',
-            loadChildren: './offers/offers.module#OffersPageModule'
-          },
-          {
-            path: 'new',
-            loadChildren: './offers/new-offer/new-offer.module#NewOfferPageModule'
-          },
-          {
-            path: 'edit/:placeId',
-            loadChildren: './offers/edit-offer/edit-offer.module#EditOfferPageModule'
-          },
-          {
-            path: ':placeId',
-            loadChildren: './offers/offer-bookings/offer-bookings.module#OfferBookingsPageModule'
-          }
-        ]
+        loadChildren: () => import('./offers/offers.module').then( m => m.OffersPageModule),
+
       },
       {
         path: '',
