@@ -4,7 +4,6 @@ import { NavController, ModalController } from '@ionic/angular';
 import { CreateBookingComponent } from '../../../bookings/create-booking/create-booking.component';
 import { PlacesService } from '../../places.service';
 import { Place } from '../../places.model';
-import { loadavg } from 'os';
 
 @Component({
   selector: 'app-place-details',

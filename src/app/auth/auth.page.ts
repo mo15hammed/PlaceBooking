@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-auth',
@@ -8,15 +9,31 @@ import { AuthService } from './auth.service';
 })
 export class AuthPage implements OnInit {
 
+  private isLoading: boolean = false;
+
   constructor(
     private authService: AuthService,
+    private loadingCtrl: LoadingController
     ) { }
 
   ngOnInit() {
   }
 
   onLogin() {
-    this.authService.login();
+
+    this.isLoading = true;
+    
+    this.loadingCtrl.create({keyboardClose: true, message: 'Logging in', spinner: 'dots'}).then(loadingEl => {
+      loadingEl.present();
+      setTimeout(() => {
+        loadingEl.dismiss();
+        this.isLoading = false;
+        this.authService.login();
+      }, 1500);
+
+    });
+    // this.authService.login();
+
   }
 
 }

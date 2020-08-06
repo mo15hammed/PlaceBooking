@@ -31,4 +31,5 @@ export class AppComponent {
     console.log("Logged Out !!!!!!");
     this.authService.logout();
   }
+
 }
