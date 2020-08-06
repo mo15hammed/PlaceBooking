@@ -1,0 +1,16 @@
+<ion-item [routerLink]="['/', 'places', 'tabs', 'offers', offer.id]">
+  <ion-thumbnail slot="start">
+    <ion-img [src]="offer.imageUrl" ></ion-img>
+  </ion-thumbnail>
+  <ion-label>
+    <h1>{{ offer.name }}</h1>
+
+    <div>
+      <ion-icon name="calendar" slot="start" color="primary"></ion-icon>
+      <ion-text class="space-left" color="tertiary">{{getDate() | date}}</ion-text>
+      <span class="space-left">to</span>
+      <ion-icon class="space-left" name="calendar" slot="start" color="primary"></ion-icon>
+      <ion-text class="space-left" color="tertiary">{{getDate() | date}}</ion-text>
+    </div>
+  </ion-label>
+</ion-item>
