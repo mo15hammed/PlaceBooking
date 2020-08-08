@@ -15,18 +15,18 @@ const routes: Routes = [
   {
     path: 'places',
     loadChildren: () => import('./places/places.module').then( m => m.PlacesPageModule),
-    canActivate: [AuthGuard]
+    canLoad: [AuthGuard]
   },
   {
     path: 'bookings',
     loadChildren: () => import('./bookings/bookings.module').then( m => m.BookingsPageModule),
-    canActivate: [AuthGuard]
+    canLoad: [AuthGuard]
   },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes)
   ],
   // exports: [RouterModule]
 })

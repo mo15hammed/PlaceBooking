@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth.service';
 import { LoadingController } from '@ionic/angular';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-auth',
@@ -32,8 +33,11 @@ export class AuthPage implements OnInit {
       }, 1500);
 
     });
-    // this.authService.login();
+  }
 
+  onSubmit(form: NgForm) {
+    console.log(form);
+    
   }
 
 }
