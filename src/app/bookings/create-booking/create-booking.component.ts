@@ -23,7 +23,10 @@ export class CreateBookingComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  
+    // console.log(this.loadedPlace);
     
+
     const availableFrom = new Date(this.loadedPlace.availableFrom);
     const availableTo = new Date(this.loadedPlace.availableTo);
     if (this.selectedMode === 'random') {

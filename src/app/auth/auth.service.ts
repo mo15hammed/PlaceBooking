@@ -8,9 +8,14 @@ import { Router } from '@angular/router';
 export class AuthService {
   constructor(private router: Router) {}
   private _userIsauthenticated: boolean = true;
+  private _userId: string= 'abc';
 
   getUserIsAuthenticated() {
     return this._userIsauthenticated;
+  }
+
+  getUserId() {
+    return this._userId;
   }
 
   login() {

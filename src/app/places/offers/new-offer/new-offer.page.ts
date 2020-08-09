@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { PlacesService } from '../../places.service';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-new-offer',
@@ -10,7 +12,7 @@ export class NewOfferPage implements OnInit {
 
   public form: FormGroup;
 
-  constructor() { }
+  constructor(private placesService: PlacesService, private navCtrl: NavController) { }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -43,7 +45,19 @@ export class NewOfferPage implements OnInit {
     }
     
     console.log("Creating new offer...");
+    console.log(this.form.value['dateFrom']);
     
+    this.placesService.addPlace(
+      this.form.value['title'],
+      this.form.value['description'],
+      this.form.value['price'],
+      new Date(this.form.value.dateFrom),
+      new Date(this.form.value.dateTo),
+    );
+
+    this.form.reset();
+    this.navCtrl.navigateBack("/places/tabs/offers");
+
   }
 
 

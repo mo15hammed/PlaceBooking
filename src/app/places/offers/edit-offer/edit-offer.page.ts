@@ -1,17 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Place } from '../../places.model';
 import { PlacesService } from '../../places.service';
 import { ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-edit-offer',
   templateUrl: './edit-offer.page.html',
   styleUrls: ['./edit-offer.page.scss'],
 })
-export class EditOfferPage implements OnInit {
+export class EditOfferPage implements OnInit, OnDestroy {
 
+  private offersSub : Subscription;
   offer: Place;
   form: FormGroup;
 
@@ -25,11 +27,16 @@ export class EditOfferPage implements OnInit {
         this.navCtrl.navigateBack('/places/tabs/offers');
         return;
       }
-      this.offer = this.placesService.getPlace(paramMap.get('placeId'));
+
+      this.offersSub = this.placesService.getPlace(paramMap.get('placeId')).subscribe (offer => {
+        this.offer = offer;
+      })
+
+      // this.offer = this.placesService.getPlace(paramMap.get('placeId'));
       // console.log("Offer : ", this.offer);
 
       this.form = new FormGroup({
-        title: new FormControl(this.offer.name, {
+        title: new FormControl(this.offer.title, {
           updateOn: 'change',
           validators: [Validators.required]
         }),
@@ -54,6 +61,11 @@ export class EditOfferPage implements OnInit {
     })
   }
 
+  ngOnDestroy() {
+    if (this.offersSub) {
+      this.offersSub.unsubscribe;
+    }
+  }
   onEditOffer() {
     if (!this.form.valid) {
       return;

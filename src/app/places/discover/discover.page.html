@@ -23,7 +23,7 @@
           <ion-img [src]="loadedPlaces[0].imageUrl"></ion-img>
           <ion-card-header>
             <ion-card-subtitle>{{ loadedPlaces[0].price | currency }} / Night</ion-card-subtitle>
-            <ion-card-title>{{ loadedPlaces[0].name }}</ion-card-title>
+            <ion-card-title>{{ loadedPlaces[0].title }}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <p>{{ loadedPlaces[0].description }}</p>
@@ -49,7 +49,7 @@
               <ion-img [src]="place.imageUrl" ></ion-img>
             </ion-thumbnail>
             <ion-label>
-              <h1>{{ place.name }}</h1>
+              <h1>{{ place.title }}</h1>
               <p>{{ place.description }}</p>
             </ion-label>
           </ion-item>

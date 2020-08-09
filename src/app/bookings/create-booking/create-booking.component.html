@@ -3,7 +3,7 @@
     <ion-buttons slot="primary">
       <ion-icon name="close" slot="icon-only" (click)="onCancel()"></ion-icon>
     </ion-buttons>
-    <ion-title>{{ loadedPlace.name }}</ion-title>
+    <ion-title>{{ loadedPlace.title }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -52,11 +52,11 @@
             </ion-label>
             <ion-datetime 
               display-format="MMM DD YYYY" 
-              picker-format="YY MM DD"
+              picker-format="YYYY MM DD"
               [min]="loadedPlace.availableFrom.toISOString()"
               [max]="loadedPlace.availableTo.toISOString()"
               name="date-from"
-              [ngModel]="startDate"
+              [(ngModel)]="startDate"
               #dateFromCtrl="ngModel"
               required
             >
@@ -70,7 +70,7 @@
             </ion-label>
             <ion-datetime 
               display-format="MMM DD YYYY" 
-              picker-format="YY MM DD"
+              picker-format="YYYY MM DD"
               [min]="dateFromCtrl.value"
               [max]="loadedPlace.availableTo.toISOString()"
               name="date-to"
