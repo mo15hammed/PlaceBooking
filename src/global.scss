@@ -27,11 +27,27 @@
 
 /*******************************************************************************/
 
-.ion-invalid.ion-touched ion-label{
-    color: var(--ion-color-danger);
+
+// Forms styling
+// .ion-invalid.ion-touched ion-label{
+//     color: var(--ion-color-danger);
+// }
+
+.md .error-msg {
+    font-size: 12px !important;
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+    color: var(--ion-color-danger) !important;
+    // position: relative;
+    // left: 18px;
+    // height: 
 }
 
-ion-item .validation-msg {
+.ios .error-msg {
     font-size: 12px !important;
-    margin-top: 0px !important;
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+    color: var(--ion-color-danger) !important;
+    position: relative;
+    left: 18px;
 }

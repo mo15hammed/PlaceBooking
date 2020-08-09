@@ -82,7 +82,7 @@ export class PlaceDetailsPage implements OnInit {
 
     this.modalCtrl.create({
       component: CreateBookingComponent,
-      componentProps: {loadedPlace : this.place}
+      componentProps: {loadedPlace : this.place, selectedMode: mode}
     }).then(modalEl => {
       modalEl.present();
       return modalEl.onDidDismiss();

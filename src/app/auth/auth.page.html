@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Authentication</ion-title>
+    <ion-title>{{ isLogin ? 'Login' : 'Signup' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding" >
-  <div class="ion-text-center">
+  <div>
 
-    <form #form="ngForm" (ngSubmit)="onSubmit(authForm)">
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
       <ion-grid>
         <ion-row>
           <ion-col size-sm="6" offset-sm="3">
@@ -22,9 +22,10 @@
               #emailCtrl="ngModel"
               ></ion-input>
             </ion-item>
-            <ion-item *ngIf="!emailCtrl.valid && emailCtrl.touched" lines="none">
-              <ion-label class="validation-msg">Email not valid</ion-label>
-            </ion-item>
+            <div *ngIf="!emailCtrl.valid && emailCtrl.touched" class="error-msg">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              Email not valid.
+          </div>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -40,9 +41,10 @@
               #passwordCtrl="ngModel"
               ></ion-input>
             </ion-item>
-            <ion-item *ngIf="!passwordCtrl.valid && passwordCtrl.touched" lines="none">
-              <ion-label class="validation-msg">Password not valid</ion-label>
-            </ion-item>
+              <div *ngIf="!passwordCtrl.valid && passwordCtrl.touched" class="error-msg">
+                <ion-icon name="alert-circle-outline"></ion-icon>
+                Password must be at least 6 characters.
+              </div>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -52,8 +54,9 @@
               expand="full"
               fill="clear"
               type="button"
+              (click)="switchAuth()"
             >
-              Switch to Login
+              Switch to {{ isLogin ? 'Signup' : 'Login' }}
             </ion-button>
             <ion-button
               color="success"
