@@ -19,7 +19,7 @@ export class PlacesService {
       199.99,
       new Date('2020-01-01'),
       new Date('2020-12-31'),
-      this.authsrevice.getUserId()
+      'abc'
     ),
     new Place(
       "p2",
@@ -29,7 +29,7 @@ export class PlacesService {
       199.99,
       new Date('2020-01-01'),
       new Date('2020-12-31'),
-      this.authsrevice.getUserId()
+      'a'
     ),
     new Place(
       "p3",
@@ -39,7 +39,7 @@ export class PlacesService {
       199.99,
       new Date('2020-01-01'),
       new Date('2020-12-31'),
-      this.authsrevice.getUserId()
+      'abc'
     ),
     
   ]);
@@ -64,7 +64,7 @@ export class PlacesService {
       price,
       dateFrom,
       dateTo,
-      this.authsrevice.getUserId()
+      this.authsrevice.userId
     );
     
     return this.places.pipe(take(1), delay(1000), tap(places => {

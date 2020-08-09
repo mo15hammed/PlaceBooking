@@ -14,7 +14,7 @@ export class AuthService {
     return this._userIsauthenticated;
   }
 
-  getUserId() {
+  get userId() {
     return this._userId;
   }
 
