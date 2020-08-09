@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Place } from '../../places.model';
 import { PlacesService } from '../../places.service';
 import { ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,11 +13,12 @@ import { Subscription } from 'rxjs';
 })
 export class EditOfferPage implements OnInit, OnDestroy {
 
-  private offersSub : Subscription;
+  private offerSub : Subscription;
+  private offerEditSub : Subscription;
   offer: Place;
   form: FormGroup;
 
-  constructor(private placesService: PlacesService,private actRoute: ActivatedRoute, private navCtrl: NavController) { }
+  constructor(private placesService: PlacesService,private actRoute: ActivatedRoute, private navCtrl: NavController, private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
 
@@ -28,7 +29,7 @@ export class EditOfferPage implements OnInit, OnDestroy {
         return;
       }
 
-      this.offersSub = this.placesService.getPlace(paramMap.get('placeId')).subscribe (offer => {
+      this.offerSub = this.placesService.getPlace(paramMap.get('placeId')).subscribe (offer => {
         this.offer = offer;
       })
 
@@ -48,11 +49,11 @@ export class EditOfferPage implements OnInit, OnDestroy {
           updateOn: 'change',
           validators: [Validators.required, Validators.min(1)]
         }),
-        dateFrom: new FormControl(null, {
+        dateFrom: new FormControl(this.offer.availableFrom.toISOString(), {
           updateOn: 'blur',
           validators: [Validators.required]
         }),
-        dateTo:  new FormControl(null, {
+        dateTo:  new FormControl(this.offer.availableTo.toISOString(), {
           updateOn: 'blur',
           validators: [Validators.required]
         })
@@ -62,14 +63,30 @@ export class EditOfferPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.offersSub) {
-      this.offersSub.unsubscribe;
+    if (this.offerSub) {
+      this.offerSub.unsubscribe;
+    }
+    if (this.offerEditSub) {
+      this.offerEditSub.unsubscribe();
     }
   }
   onEditOffer() {
     if (!this.form.valid) {
       return;
     }
+
+    this.loadingCtrl.create({keyboardClose: true, message: "Updating offer"}).then(loadingEl => {
+      loadingEl.present();
+
+      this.offerEditSub = this.placesService.editPlace(this.offer.id, this.form.value.title, this.form.value.description).subscribe(offer => {
+        console.log(offer);
+        
+        loadingEl.dismiss();
+        this.navCtrl.navigateBack("/places/tabs/offers");
+
+      });
+
+    });
     
     console.log("editted !!");
     

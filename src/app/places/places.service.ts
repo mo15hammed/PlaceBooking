@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Place } from './places.model'
 import { AuthService } from '../auth/auth.service';
 import { BehaviorSubject } from 'rxjs';
-import { take, map } from 'rxjs/operators';
+import { take, map, delay, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -67,16 +67,34 @@ export class PlacesService {
       this.authsrevice.getUserId()
     );
     
-    this.places.pipe(take(1)).subscribe(places => {
+    return this.places.pipe(take(1), delay(1000), tap(places => {
       this._places.next(places.concat(place));
-    });
+    }));
 
   }
 
-  editPlace(place: Place) {
-  //   this._places.find(p => { return p.id === place.id }).title = place.title;
-  //   this._places.find(p => { return p.id === place.id }).description = place.description;
-  //   this._places.find(p => { return p.id === place.id }).price = place.price;
+  editPlace(placeId: string, title: string, description: string) {
+
+    return this.places.pipe(take(1), delay(1000), tap(places => {
+
+      const updatedPlaces = [...places];
+      const placeIndex = places.findIndex(p => p.id == placeId);
+      const oldPlace = updatedPlaces[placeIndex];
+      updatedPlaces[placeIndex] = new Place(
+        oldPlace.id,
+        title,
+        description,
+        oldPlace.imageUrl,
+        oldPlace.price,
+        oldPlace.availableFrom,
+        oldPlace.availableTo,
+        oldPlace.userId
+      );
+
+      this._places.next(updatedPlaces);
+
+    }));
+    
   }
 
   constructor(private authsrevice: AuthService) { }
