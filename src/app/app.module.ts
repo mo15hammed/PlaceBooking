@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
+import { HttpClientModule } from "@angular/common/http";
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -14,7 +15,7 @@ import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), FormsModule, AppRoutingModule, PlacesPageRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), HttpClientModule, FormsModule, AppRoutingModule, PlacesPageRoutingModule],
   providers: [
     StatusBar,
     SplashScreen,

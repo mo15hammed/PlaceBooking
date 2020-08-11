@@ -60,6 +60,7 @@ export class NewOfferPage implements OnInit, OnDestroy {
         new Date(this.form.value.dateTo),
       ).subscribe(() => {
 
+        console.log("offer Created");
         loadingEl.dismiss();
         this.form.reset();
         this.navCtrl.navigateBack("/places/tabs/offers");
