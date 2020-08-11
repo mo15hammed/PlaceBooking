@@ -7,19 +7,20 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding-top">
+<ion-content class="ion-padding-top ion-text-center">
   <ion-segment (ionChange)="onFilterPlaces($event)" value="all">
     <ion-segment-button value="all">All Places</ion-segment-button>
     <ion-segment-button value="bookable">Bookable Places</ion-segment-button>
   </ion-segment>
-  <ion-grid *ngIf="!relevantPlaces || relevantPlaces.length <= 0" >
+  <ion-spinner *ngIf="isLoading" class="ion-margin-top"></ion-spinner>
+  <ion-grid *ngIf="!isLoading && (!relevantPlaces || relevantPlaces.length <= 0)" >
     <ion-row class="ion-padding">
       <ion-col size-sm="8" offset-sm="2" class="ion-text-center ion-margin">
-        There are no bookable places at the moment, pleace come back later.
+        There are no places at the moment, pleace come back later.
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-grid *ngIf="relevantPlaces.length > 0">
+  <ion-grid *ngIf="!isLoading && (relevantPlaces || relevantPlaces.length > 0)">
     <ion-row>
       <ion-col size="12" size-sm="8" offset-sm="2">
         <ion-card class="ion-text-center">

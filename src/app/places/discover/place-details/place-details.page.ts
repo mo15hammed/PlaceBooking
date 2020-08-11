@@ -15,8 +15,10 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class PlaceDetailsPage implements OnInit, OnDestroy {
 
+
   private placesSub: Subscription;
   private place: Place;
+  private isLoading: boolean;
   private isBookable: boolean = true;
 
   constructor(
@@ -39,8 +41,9 @@ export class PlaceDetailsPage implements OnInit, OnDestroy {
         this.navCtrl.navigateBack('/places/tabs/discover');
         return;
       }
-
+      this.isLoading = true;
       this.placesSub = this.placesService.getPlace(paramMap.get('placeId')).subscribe (place => {
+        this.isLoading = false;
         this.isBookable = place.userId != this.authService.userId;
         this.place = place;
         console.log(this.place);      

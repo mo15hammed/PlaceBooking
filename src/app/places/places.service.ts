@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Place } from './places.model'
 import { AuthService } from '../auth/auth.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { take, map, delay, tap, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
@@ -24,17 +24,46 @@ export class PlacesService {
 
   private _places = new BehaviorSubject<Place[]>([]);
 
+  /**
+   * @returns all places as an Observable
+   */
   get places() {
     return this._places.asObservable();
   }
 
-  getPlace(placeId: String) {
-    return this.places.pipe(take(1), map(places => {
-      return {...places.find(p => p.id == placeId)};
-    }))    
+
+  getPlace(placeId: string) {
+
+    return this.httpCilent
+      .get<PlaceInterface>(`https://placebooking-5d7b2.firebaseio.com/offered-places/${placeId}.json`)
+      .pipe(
+        take(1),
+        map(resData => {
+          return new Place (
+            placeId,
+            resData.title,
+            resData.description,
+            resData.imageUrl,
+            resData.price,
+            new Date(resData.availableFrom),
+            new Date(resData.availableTo),
+            resData.userId
+          );
+        })
+      );
+
+    // return this.places.pipe(take(1), map(places => {
+      
+    //   return {...places.find(p => p.id == placeId)};
+
+    // }))    
   }
 
 
+  /**
+   * fetches all places from firebase realtime database
+   * @returns an Observable
+   */
   fetchPlaces() {
     return this.httpCilent
       .get<{[key: string]: PlaceInterface}>('https://placebooking-5d7b2.firebaseio.com/offered-places.json')
@@ -58,10 +87,23 @@ export class PlacesService {
 
           return places;
         }),
-        tap(places => this._places.next(places)));
+        tap(places => {
+          console.log("data fetched again");
+          this._places.next(places)
+        })
+      );
+      
   }
 
-
+  /**
+   * adds a new place to firebase realtime database
+   * @param title title of the new place
+   * @param description a short discription for the new place
+   * @param price price for the new place
+   * @param dateFrom the starting availability date for the place
+   * @param dateTo a date in witch the place will no longer be available
+   * @returns an Observable
+   */
   addPlace(title: string, description: string, price: number, dateFrom: Date, dateTo: Date) {
 
     let generated_id: string;
@@ -76,7 +118,6 @@ export class PlacesService {
       dateTo,
       this.authsrevice.userId
     );
-
 
     return this.httpCilent
       .post<{name: string}>('https://placebooking-5d7b2.firebaseio.com/offered-places.json', {...newPlace, id: null})
@@ -94,27 +135,38 @@ export class PlacesService {
 
   }
 
+  /**
+   * edits an already existing place
+   * @param placeId a unique id
+   * @param title the editted title
+   * @param description the editted description
+   * @returns an Observable
+   */
   editPlace(placeId: string, title: string, description: string) {
+    let updatedPlaces: Place[];
+    return this.places
+      .pipe(
+        take(1),
+        switchMap(places => {
+          updatedPlaces = [...places];
+          const placeIndex = places.findIndex(p => p.id == placeId);
+          const oldPlace = updatedPlaces[placeIndex];
+          updatedPlaces[placeIndex] = new Place(
+            oldPlace.id,
+            title,
+            description,
+            oldPlace.imageUrl,
+            oldPlace.price,
+            oldPlace.availableFrom,
+            oldPlace.availableTo,
+            oldPlace.userId
+          );
 
-    return this.places.pipe(take(1), delay(1000), tap(places => {
-
-      const updatedPlaces = [...places];
-      const placeIndex = places.findIndex(p => p.id == placeId);
-      const oldPlace = updatedPlaces[placeIndex];
-      updatedPlaces[placeIndex] = new Place(
-        oldPlace.id,
-        title,
-        description,
-        oldPlace.imageUrl,
-        oldPlace.price,
-        oldPlace.availableFrom,
-        oldPlace.availableTo,
-        oldPlace.userId
+          return this.httpCilent.put(`https://placebooking-5d7b2.firebaseio.com/offered-places/${placeId}.json`, {...updatedPlaces[placeIndex], id: null});
+        }),
+        tap(() => {return this._places.next(updatedPlaces)})
       );
 
-      this._places.next(updatedPlaces);
-
-    }));
     
   }
 

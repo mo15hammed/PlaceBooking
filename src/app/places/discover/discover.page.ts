@@ -4,6 +4,7 @@ import { Place } from '../places.model';
 import { Subscription } from 'rxjs';
 import { MenuController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth/auth.service';
+import { isProtractorLocator } from 'protractor/built/locators';
 
 @Component({
   selector: 'app-discover',
@@ -12,6 +13,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class DiscoverPage implements OnInit, OnDestroy {
 
+  private isLoading = true;
   private placesSub: Subscription;
   private loadedPlaces: Place[];
   private relevantPlaces: Place[];
@@ -26,6 +28,13 @@ export class DiscoverPage implements OnInit, OnDestroy {
       this.relevantPlaces = this.loadedPlaces;
       this.loadedListPlaces = this.relevantPlaces.slice(1);  
     });
+
+  }
+
+  ionViewWillEnter() {
+    this.isLoading = true;
+    console.log("fetched");
+    this.placesService.fetchPlaces().subscribe(() => this.isLoading = false);
   }
 
   ngOnDestroy() {
