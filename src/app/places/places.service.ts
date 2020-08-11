@@ -148,11 +148,17 @@ export class PlacesService {
       .pipe(
         take(1),
         switchMap(places => {
+          if (places || places.length < 0) {
+            return this.fetchPlaces();
+          } 
+        }),
+        switchMap(places => {
           updatedPlaces = [...places];
+          console.log(updatedPlaces);
           const placeIndex = places.findIndex(p => p.id == placeId);
           const oldPlace = updatedPlaces[placeIndex];
           updatedPlaces[placeIndex] = new Place(
-            oldPlace.id,
+            placeId,
             title,
             description,
             oldPlace.imageUrl,

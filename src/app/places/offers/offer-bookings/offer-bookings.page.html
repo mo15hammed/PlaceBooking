@@ -3,10 +3,39 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="places/tabs/offers"></ion-back-button>
     </ion-buttons>
-    <ion-title>{{ place.title }}</ion-title>
+    <ion-title *ngIf="!isLoading" >{{ offer.title }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-button color="warning" [routerLink]="['/', 'places', 'tabs', 'offers', 'edit', place.id]">Edit Offer</ion-button>
+<ion-content class="ion-text-center">
+  <ion-spinner *ngIf="isLoading"></ion-spinner>
+  <ion-grid *ngIf="!isLoading" class="ion-no-padding">
+    <ion-row>
+      <ion-col>
+        <ion-img [src]="offer.imageUrl" ></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding">
+        <ion-text >{{ offer.description }}</ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-start ion-padding-horizontal">
+        <ion-icon class="space-left" name="calendar" slot="" color="primary"></ion-icon>
+        <ion-text class="space-left">{{offer.availableFrom | date}}</ion-text>
+      </ion-col>
+      <ion-col size="1">to</ion-col>
+      <ion-col class="ion-text-end ion-padding-horizontal">
+        <ion-icon class="space-right" name="calendar" slot="" color="primary"></ion-icon>
+        <ion-text class="space-right">{{ offer.availableTo | date}}</ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-margin-top">
+        <ion-button color="warning" [routerLink]="['/', 'places', 'tabs', 'offers', 'edit', offer.id]">Edit Offer</ion-button>
+      </ion-col>
+    </ion-row>
+    
+  </ion-grid>
 </ion-content>

@@ -11,8 +11,9 @@ import { Subscription } from 'rxjs';
 })
 export class OfferBookingsPage implements OnInit, OnDestroy {
 
+  private isLoading: boolean;
   private placeSub: Subscription;
-  private place: Place;
+  private offer: Place;
 
   constructor(
     private placesService: PlacesService,
@@ -20,9 +21,13 @@ export class OfferBookingsPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    console.log('-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-');
+    this.isLoading = true;
     this.actRoute.paramMap.subscribe(paramMap => {
-      this.placeSub = this.placesService.getPlace(paramMap.get('placeId')).subscribe(place => {
-        this.place = place;
+      this.placeSub = this.placesService.getPlace(paramMap.get('placeId')).subscribe(offer => {
+        
+        this.isLoading = false;
+        this.offer = offer;
       });
     })
   }

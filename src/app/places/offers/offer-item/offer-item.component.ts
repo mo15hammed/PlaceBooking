@@ -12,7 +12,8 @@ export class OfferItemComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {    
+  }
 
 
   getDate() {

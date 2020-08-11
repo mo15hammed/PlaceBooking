@@ -26,7 +26,8 @@ export class DiscoverPage implements OnInit, OnDestroy {
     this.placesSub = this.placesService.places.subscribe( places => {
       this.loadedPlaces = places;
       this.relevantPlaces = this.loadedPlaces;
-      this.loadedListPlaces = this.relevantPlaces.slice(1);  
+      this.loadedListPlaces = this.relevantPlaces.slice(1);
+      
     });
 
   }
@@ -34,7 +35,10 @@ export class DiscoverPage implements OnInit, OnDestroy {
   ionViewWillEnter() {
     this.isLoading = true;
     console.log("fetched");
-    this.placesService.fetchPlaces().subscribe(() => this.isLoading = false);
+    this.placesService.fetchPlaces().subscribe(() => {
+      this.isLoading = false;
+      
+    });
   }
 
   ngOnDestroy() {
@@ -47,8 +51,8 @@ export class DiscoverPage implements OnInit, OnDestroy {
     console.log(ev.detail);
     
     if (ev.detail.value == "bookable") {
-
-      this.relevantPlaces = this.loadedPlaces.filter(p => p.userId != this.authService.userId)
+      
+      this.relevantPlaces = this.loadedPlaces.filter(p => p.userId != this.authService.userId);
       this.loadedListPlaces = this.relevantPlaces.slice(1);  
       
     } else {
