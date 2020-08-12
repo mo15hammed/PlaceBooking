@@ -57,12 +57,14 @@ export class CreateBookingComponent implements OnInit {
   }
 
   datesValid() {
-    if (this.form != undefined) {
+    if (this.form != undefined && this.form.value['date-from'] && this.form.value['date-to']) {
+      
       const startDate = new Date(this.form.value['date-from']);
-      const endDate = new Date(this.form.value['date-to'])
-      return endDate > startDate
+      const endDate = new Date(this.form.value['date-to']);
+      
+      return endDate >= startDate;
     }
-    return true;
+    return false;
   }
 
 }

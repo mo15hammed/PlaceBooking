@@ -1,0 +1,4 @@
+<div>
+  <ion-button (click)="onPickLocation()" expand="block"><ion-icon name="map" slot="start"></ion-icon>Select Location</ion-button>
+  <ion-img *ngIf="placeLocation" [src]="placeLocation.staticMapImageUrl" class="ion-margin-top"></ion-img>
+</div>

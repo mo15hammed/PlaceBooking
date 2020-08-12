@@ -142,7 +142,7 @@ export class PlacesService {
    * @param description the editted description
    * @returns an Observable
    */
-  editPlace(placeId: string, title: string, description: string) {
+  editPlace(placeId: string, title: string, description: string, price: number, availableFrom: Date, availableTo: Date) {
     let updatedPlaces: Place[];
     return this.places
       .pipe(
@@ -162,9 +162,9 @@ export class PlacesService {
             title,
             description,
             oldPlace.imageUrl,
-            oldPlace.price,
-            oldPlace.availableFrom,
-            oldPlace.availableTo,
+            price,
+            availableFrom,
+            availableTo,
             oldPlace.userId
           );
 

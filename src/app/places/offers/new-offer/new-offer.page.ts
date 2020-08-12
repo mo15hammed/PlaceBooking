@@ -14,6 +14,10 @@ export class NewOfferPage implements OnInit, OnDestroy {
   private offerSub: Subscription;
   public form: FormGroup;
 
+  lat = 48.858093;
+  lng = 2.294694;
+  zoom = 16;
+
   constructor(private placesService: PlacesService, private navCtrl: NavController, private loadingCtrl: LoadingController) { }
 
   ngOnInit() {

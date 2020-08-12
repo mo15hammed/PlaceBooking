@@ -100,7 +100,15 @@ export class EditOfferPage implements OnInit, OnDestroy {
     this.loadingCtrl.create({keyboardClose: true, message: "Updating offer"}).then(loadingEl => {
       loadingEl.present();
 
-      this.offerEditSub = this.placesService.editPlace(this.offer.id, this.form.value.title, this.form.value.description).subscribe(offer => {
+      this.offerEditSub = this.placesService
+        .editPlace(
+          this.offer.id,
+          this.form.value.title,
+          this.form.value.description,
+          this.form.value.price,
+          this.form.value.dateFrom,
+          this.form.value.dateTo
+        ).subscribe(offer => {
         console.log(offer);
         
         loadingEl.dismiss();
