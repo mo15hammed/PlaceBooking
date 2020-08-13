@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { MapModalComponent } from '../../map-modal/map-modal.component';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { PlaceLocation } from 'src/app/places/location-model';
 
 @Component({
   selector: 'app-location-picker',
@@ -13,7 +14,9 @@ import { of } from 'rxjs';
 })
 export class LocationPickerComponent implements OnInit {
 
-  private placeLocation;
+  @Output() locationPick = new EventEmitter<PlaceLocation>();
+  private isLoading = false;
+  private placeLocation: PlaceLocation;
 
   constructor(private mapModal: ModalController, private http: HttpClient) { }
 
@@ -30,11 +33,12 @@ export class LocationPickerComponent implements OnInit {
       if (!modalData.data) {
         return;
       }
+      this.isLoading = true;
       console.log("Data: ", modalData.data);
       this.placeLocation = {
         lat: modalData.data.lat,
         lng: modalData.data.lng,
-        getStaticMapImageUrl: "",
+        staticMapImageUrl: "",
         address: ""
       };
 
@@ -45,7 +49,12 @@ export class LocationPickerComponent implements OnInit {
               this.placeLocation.staticMapImageUrl = this.getStaticMapImageUrl(this.placeLocation.lat, this.placeLocation.lng, 14);
               return of(this.placeLocation);
             })
-          ).subscribe(placeLocation => console.log(placeLocation.address));
+          ).subscribe(placeLocation => {
+            console.log(placeLocation.address);
+            this.isLoading = false;
+            
+            this.locationPick.emit(placeLocation);
+          });
 
     });
   }

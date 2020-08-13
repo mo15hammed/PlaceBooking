@@ -14,10 +14,6 @@ export class NewOfferPage implements OnInit, OnDestroy {
   private offerSub: Subscription;
   public form: FormGroup;
 
-  lat = 48.858093;
-  lng = 2.294694;
-  zoom = 16;
-
   constructor(private placesService: PlacesService, private navCtrl: NavController, private loadingCtrl: LoadingController) { }
 
   ngOnInit() {
@@ -34,15 +30,22 @@ export class NewOfferPage implements OnInit, OnDestroy {
         updateOn: 'change',
         validators: [Validators.required, Validators.min(1)]
       }),
-      dateFrom: new FormControl(null, {
+      dateFrom: new FormControl(new Date().toISOString(), {
         updateOn: 'blur',
         validators: [Validators.required]
       }),
-      dateTo: new FormControl(null, {
+      dateTo: new FormControl(new Date().toISOString(), {
         updateOn: 'blur',
         validators: [Validators.required]
-      })
+      }),
+      location: new FormControl(null, {
+        validators: [Validators.required]
+      }),
     });
+  }
+
+  onLocationPicked(event) {    
+    this.form.patchValue({location: event});
   }
 
   onAddNewOffer() {
@@ -51,7 +54,7 @@ export class NewOfferPage implements OnInit, OnDestroy {
     }
     
     console.log("Creating new offer...");
-    console.log(this.form.value['dateFrom']);
+    console.log(this.form.value.location);
     
     this.loadingCtrl.create({keyboardClose: true, message: "Creating offer"}).then(loadingEl => {
       loadingEl.present();
@@ -62,6 +65,7 @@ export class NewOfferPage implements OnInit, OnDestroy {
         this.form.value['price'],
         new Date(this.form.value.dateFrom),
         new Date(this.form.value.dateTo),
+        this.form.value.location
       ).subscribe(() => {
 
         console.log("offer Created");

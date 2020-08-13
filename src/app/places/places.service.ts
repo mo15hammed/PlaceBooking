@@ -5,6 +5,7 @@ import { AuthService } from '../auth/auth.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { take, map, delay, tap, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { PlaceLocation } from './location-model';
 
 interface PlaceInterface {
   availableFrom: Date;
@@ -13,6 +14,7 @@ interface PlaceInterface {
   imageUrl: string;
   price: number;
   title: string;
+  location: PlaceLocation;
   userId: string;
 }
 
@@ -47,6 +49,7 @@ export class PlacesService {
             resData.price,
             new Date(resData.availableFrom),
             new Date(resData.availableTo),
+            resData.location,
             resData.userId
           );
         })
@@ -80,6 +83,7 @@ export class PlacesService {
                 resData[key].price,
                 new Date(resData[key].availableFrom),
                 new Date(resData[key].availableTo),
+                resData[key].location,
                 resData[key].userId,
               ));
             }
@@ -104,7 +108,7 @@ export class PlacesService {
    * @param dateTo a date in witch the place will no longer be available
    * @returns an Observable
    */
-  addPlace(title: string, description: string, price: number, dateFrom: Date, dateTo: Date) {
+  addPlace(title: string, description: string, price: number, dateFrom: Date, dateTo: Date, location: PlaceLocation) {
 
     let generated_id: string;
 
@@ -116,6 +120,7 @@ export class PlacesService {
       price,
       dateFrom,
       dateTo,
+      location,
       this.authsrevice.userId
     );
 
@@ -165,6 +170,7 @@ export class PlacesService {
             price,
             availableFrom,
             availableTo,
+            oldPlace.location,
             oldPlace.userId
           );
 
