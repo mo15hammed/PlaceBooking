@@ -1,0 +1,13 @@
+{
+  "appId": "com.mo15hammed.placebooking",
+  "appName": "PlaceBooking",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

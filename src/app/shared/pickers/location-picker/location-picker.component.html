@@ -4,9 +4,9 @@
     <ion-icon name="map" slot="start"></ion-icon>
     Select Location
   </ion-button>
-  <div class="map-image-container" *ngIf="placeLocation">
+  <div class="map-image-container">
     <ion-spinner *ngIf="isLoading"></ion-spinner>
-    <ion-img *ngIf="!isLoading" [src]="placeLocation.staticMapImageUrl" class="map-image"></ion-img>
+    <ion-img *ngIf="!isLoading && placeLocation" [src]="placeLocation.staticMapImageUrl" class="map-image"></ion-img>
   </div>
 
 </div>
