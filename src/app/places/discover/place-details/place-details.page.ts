@@ -7,6 +7,7 @@ import { Place } from '../../places.model';
 import { Subscription } from 'rxjs';
 import { BookingsService } from 'src/app/bookings/bookings.service';
 import { AuthService } from 'src/app/auth/auth.service';
+import { MapModalComponent } from 'src/app/shared/map-modal/map-modal.component';
 
 @Component({
   selector: 'app-place-details',
@@ -84,10 +85,20 @@ export class PlaceDetailsPage implements OnInit, OnDestroy {
       actSheetEl.present();
     });
 
-
-    
   }
 
+  onShowMap() {
+    this.modalCtrl.create({
+      component: MapModalComponent,
+      componentProps: {
+        title: this.place.location.address,
+        isSelectable: false,
+        center: {lat: this.place.location.lat, lng: this.place.location.lng}
+      }
+    }).then(modalEl => {
+      modalEl.present();
+    })
+  }
 
   openBookingModal(mode: 'select' | 'random') {
     console.log(mode);

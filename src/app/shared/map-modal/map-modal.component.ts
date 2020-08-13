@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { MapsAPILoader } from '@agm/core';
 import { MouseEvent } from '@agm/core';
@@ -10,44 +10,33 @@ import { MouseEvent } from '@agm/core';
 })
 export class MapModalComponent implements OnInit {
 
-  constructor(private modalCCtrl: ModalController, private mapLoader: MapsAPILoader) { }
+  constructor(private modalCCtrl: ModalController) { }
 
-  @ViewChild('map') mapEl;
-  @ViewChild('marker') markerEl;
-
-  
-  private lat = 48.858093;
-  private lng = 2.294694;
-  private selected_lat = 48.858093;
-  private selected_lng = 2.294694;
-  private zoom = 16;
+  @Input() isSelectable = true;
+  @Input() title = "Pick a location";
+  @Input() center = {lat: 48.858093, lng: 2.294694}
+  @Input() zoom = 16;
+  private selected_lat: number;
+  private selected_lng: number;
 
   ngOnInit() {
-    const title = 'My first AGM project';
- 
-    this.mapLoader.load().then(e => {
-
-      console.log("map ready");
-    });
-
+    this.selected_lat = this.center.lat;
+    this.selected_lng = this.center.lng;  
   }
 
   onCancel() {
     this.modalCCtrl.dismiss();
   }
-  markerDragEnd($e: any) {
-    console.log($e);
 
-    console.log(this.mapEl.latitude);
-    
-  }
 
   onMapClicked($ev: MouseEvent) {
+    if (this.isSelectable) {
+      this.selected_lat = $ev.coords.lat;
+      this.selected_lng = $ev.coords.lng;
 
-    this.selected_lat = $ev.coords.lat;
-    this.selected_lng = $ev.coords.lng;
-
-    const selectedCoords = {lat : this.selected_lat, lng: this.selected_lng};
-    this.modalCCtrl.dismiss(selectedCoords);
+      const selectedCoords = {lat : this.selected_lat, lng: this.selected_lng};
+      
+      this.modalCCtrl.dismiss(selectedCoords);
+    }
   }
 }

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Pick a location</ion-title>
+    <ion-title>{{ title }}</ion-title>
     <ion-buttons slot="primary">
       <ion-button (click)="onCancel()">Cancel</ion-button>
     </ion-buttons>
@@ -8,8 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <agm-map [latitude]=" lat" [longitude]="lng" [zoom]="zoom" (mapClick)="onMapClicked($event)">
-    <agm-marker #marker [latitude]="selected_lat" [longitude]="selected_lng" [markerDraggable]="true"
-    (dragEnd)="markerDragEnd($event)"></agm-marker>
+  <agm-map [latitude]=" center.lat" [longitude]="center.lng" [zoom]="zoom" (mapClick)="onMapClicked($event)">
+    <agm-marker [latitude]="selected_lat" [longitude]="selected_lng"></agm-marker>
   </agm-map>
 </ion-content>

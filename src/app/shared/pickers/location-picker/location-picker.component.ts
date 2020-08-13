@@ -24,7 +24,14 @@ export class LocationPickerComponent implements OnInit {
 
 
   onPickLocation() {
-    this.mapModal.create({component: MapModalComponent}).then(modalEl => {
+    this.mapModal.create({
+      component: MapModalComponent,
+      componentProps: {
+        title: 'Pick location',
+        center: this.placeLocation ? {lat: this.placeLocation?.lat, lng: this.placeLocation?.lng} : {lat: 48.858093, lng: 2.294694},
+        isSelectable: true
+      }
+    }).then(modalEl => {
 
       modalEl.present();
       return modalEl.onDidDismiss();
