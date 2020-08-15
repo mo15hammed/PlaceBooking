@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { PlacesService } from '../../places.service';
 import { NavController, LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { CameraPhoto } from '@capacitor/core';
 
 @Component({
   selector: 'app-new-offer',
@@ -41,11 +42,28 @@ export class NewOfferPage implements OnInit, OnDestroy {
       location: new FormControl(null, {
         validators: [Validators.required]
       }),
+      image: new FormControl(null, {validators: [Validators.required]})
     });
   }
 
   onLocationPicked(event) {    
     this.form.patchValue({location: event});
+  }
+
+  onImagePicked(cameraPhoto: CameraPhoto) {
+    console.log('image Picked');
+    console.log(cameraPhoto);
+    
+    let imageFile;
+    // Fetch the photo, read as a blob, then convert to base64 format
+    const response = fetch(cameraPhoto.webPath!).then(response => {
+      response.blob().then(file => {
+        imageFile = file;
+        console.log(imageFile);
+        this.form.patchValue({image: imageFile});
+      })
+    });
+
   }
 
   onAddNewOffer() {
@@ -83,4 +101,29 @@ export class NewOfferPage implements OnInit, OnDestroy {
     }
   }
 
+
+
+
+
+  private base64ToBlob(base64: string, mime: string) {
+    mime = mime || '';
+    var sliceSize = 1024;
+    var byteChars = window.atob(base64);
+    var byteArrays = [];
+
+    for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+      var slice = byteChars.slice(offset, offset + sliceSize);
+
+      var byteNumbers = new Array(slice.length);
+      for (var i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    return new Blob(byteArrays, {type: mime});
+  }
 }

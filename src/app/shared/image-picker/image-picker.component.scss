@@ -2,7 +2,7 @@
     margin-top: 24px;
 }
 
-.map-image-container {
+.selected-image-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -11,10 +11,9 @@
     height: 20rem;
     max-height: 30vh;
     margin: auto;
-
 }
 
-.map-image {
+.selected-image {
     border: 1px solid var(--ion-color-primary);
     width: 100%;
     height: 100%;
