@@ -7,7 +7,7 @@
 <ion-content class="ion-padding" >
   <div>
 
-    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+    <form #form="ngForm" (ngSubmit)="onAuthenticate(form)">
       <ion-grid>
         <ion-row>
           <ion-col size-sm="6" offset-sm="3">
@@ -62,10 +62,10 @@
               color="success"
               expand="block"
               type="submit"
-              (click)="onLogin()"
+              (click)="onAuthenticate()"
               [disabled]="!form.valid"
             >
-              Login
+              {{ isLogin ? 'Login' : 'Signup' }}
             </ion-button>
           </ion-col>
         </ion-row>

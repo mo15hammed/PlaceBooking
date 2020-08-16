@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { MenuController } from '@ionic/angular';
 import { AuthService } from 'src/app/auth/auth.service';
 import { isProtractorLocator } from 'protractor/built/locators';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-discover',
@@ -52,9 +53,11 @@ export class DiscoverPage implements OnInit, OnDestroy {
     
     if (ev.detail.value == "bookable") {
       
-      this.relevantPlaces = this.loadedPlaces.filter(p => p.userId != this.authService.userId);
+      this.authService.userId.pipe(take(1)).subscribe( userId => {
+        this.relevantPlaces = this.loadedPlaces.filter(p => p.userId != userId);
       this.loadedListPlaces = this.relevantPlaces.slice(1);  
-      
+      })
+
     } else {
 
       this.relevantPlaces = this.loadedPlaces;

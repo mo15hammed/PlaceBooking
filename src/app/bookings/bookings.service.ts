@@ -36,10 +36,13 @@ export class BookingsService {
     */
     fetchBookings() {
         const bookings = [];
-        return this.httpClient
-        .get<{[key: string]: BookingInterface}>(`https://placebooking-5d7b2.firebaseio.com/booked-places.json?orderBy="userId"&equalTo="${this.authService.userId}"`)
-        .pipe(
-            map(resData => {
+
+        return this.authService.userId.pipe(
+            take(1),
+            switchMap(userId => {
+                return this.httpClient
+                .get<{[key: string]: BookingInterface}>(`https://placebooking-5d7b2.firebaseio.com/booked-places.json?orderBy="userId"&equalTo="${userId}"`)
+            }), map(resData => {
                 for (const key in resData) {
                     bookings.push(new Booking(
                         key,
@@ -59,7 +62,7 @@ export class BookingsService {
             tap(bookings => {
                 this._bookings.next(bookings)
             })
-        );
+        )
     }
 
     /**
@@ -84,23 +87,28 @@ export class BookingsService {
         dateTo: Date
     ) {
 
-        let generated_id: string;
-        const booking: Booking = new Booking(
-            new Date().toISOString(),
-            placeId,
-            this.authService.userId,
-            placeTitle,
-            placeImage,
-            firstName,
-            lastName,
-            guestNumber,
-            dateFrom,
-            dateTo
-        );
 
-        return this.httpClient
-        .post<{name: string}>('https://placebooking-5d7b2.firebaseio.com/booked-places.json', {...booking, id: null})
-        .pipe(
+        let generated_id: string;
+        let booking: Booking;
+        return this.authService.userId.pipe(
+            take(1),
+            switchMap(userId => {
+                booking = new Booking(
+                    new Date().toISOString(),
+                    placeId,
+                    userId,
+                    placeTitle,
+                    placeImage,
+                    firstName,
+                    lastName,
+                    guestNumber,
+                    dateFrom,
+                    dateTo
+                );
+                return this.httpClient
+                .post<{name: string}>('https://placebooking-5d7b2.firebaseio.com/booked-places.json', {...booking, id: null});
+                
+            }),
             switchMap(resData => {
                 generated_id = resData.name;
                 return this.bookings;
@@ -111,6 +119,7 @@ export class BookingsService {
                 this._bookings.next(bookings.concat(booking));
             })
         );
+
 
     }
 

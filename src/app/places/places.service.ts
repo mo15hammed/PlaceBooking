@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { take, map, delay, tap, switchMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { PlaceLocation } from './location-model';
+import { exception } from 'console';
 
 interface PlaceInterface {
   availableFrom: Date;
@@ -111,32 +112,40 @@ export class PlacesService {
   addPlace(title: string, description: string, price: number, dateFrom: Date, dateTo: Date, location: PlaceLocation) {
 
     let generated_id: string;
+    let newPlace: Place;
 
-    const newPlace: Place = new Place(
-      new Date().toISOString(),
-      title,
-      description,
-      "https://i.pinimg.com/originals/65/8f/77/658f77b9b527f89922ba996560a3e2b0.jpg",
-      price,
-      dateFrom,
-      dateTo,
-      location,
-      this.authsrevice.userId
-    );
+    return this.authsrevice.userId.pipe(
+      take(1),
+      switchMap(userId => {
+        if (!userId) {
+          throw new Error('No user id');
+        }
 
-    return this.httpCilent
-      .post<{name: string}>('https://placebooking-5d7b2.firebaseio.com/offered-places.json', {...newPlace, id: null})
-      .pipe(
-        switchMap(resData => {
-          console.log(resData);
-          generated_id = resData.name;
-          return this.places;
-        }),
-        take(1),
-        tap(places => {
-          newPlace.id = generated_id;
-          this._places.next(places.concat(newPlace));
-      }));
+        newPlace = new Place(
+          new Date().toISOString(),
+          title,
+          description,
+          "https://i.pinimg.com/originals/65/8f/77/658f77b9b527f89922ba996560a3e2b0.jpg",
+          price,
+          dateFrom,
+          dateTo,
+          location,
+          userId
+        );
+
+        return this.httpCilent
+        .post<{name: string}>('https://placebooking-5d7b2.firebaseio.com/offered-places.json', {...newPlace, id: null})
+      }),
+      switchMap(resData => {
+        console.log(resData);
+        generated_id = resData.name;
+        return this.places;
+      }),
+      take(1),
+      tap(places => {
+        newPlace.id = generated_id;
+        this._places.next(places.concat(newPlace));
+    }));
 
   }
 
