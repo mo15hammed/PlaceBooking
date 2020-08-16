@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./auth.page.scss'],
 })
 export class AuthPage implements OnInit {
-  private isLogin: boolean = true;
+  isLogin: boolean = true;
 
   constructor(
     private authService: AuthService,
